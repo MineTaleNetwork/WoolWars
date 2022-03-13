@@ -1,0 +1,6 @@
+{
+  "entrypoint": "cc.minetale.woolwars.WoolWars",
+  "name": "WoolWars",
+  "version": "1.0.0",
+  "dependencies": ["mLib", "Slime"]
+}
