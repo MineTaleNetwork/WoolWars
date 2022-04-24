@@ -13,6 +13,13 @@ repositories {
     mavenCentral()
 }
 
+idea {
+    module {
+        downloadJavadoc = true
+        downloadSources = true
+    }
+}
+
 dependencies {
     compileOnly         group: 'org.projectlombok', name: 'lombok', version: '1.18.22'
     annotationProcessor group: 'org.projectlombok', name: 'lombok', version: '1.18.22'

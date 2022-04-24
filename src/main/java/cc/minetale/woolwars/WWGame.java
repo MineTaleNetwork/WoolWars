@@ -3,8 +3,11 @@ package cc.minetale.woolwars;
 import cc.minetale.slime.core.GameState;
 import cc.minetale.slime.game.Game;
 import cc.minetale.slime.game.GameManager;
+import cc.minetale.slime.player.GamePlayer;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Pos;
+import net.minestom.server.entity.Entity;
+import net.minestom.server.entity.ItemEntity;
 import net.minestom.server.entity.metadata.other.FallingBlockMeta;
 import net.minestom.server.instance.batch.AbsoluteBlockBatch;
 import net.minestom.server.instance.block.Block;
@@ -33,6 +36,11 @@ public class WWGame extends Game {
                                                            TaskSchedule.immediate(),
                                                            TaskSchedule.tick(ticksPerLevel),
                                                            ExecutionType.ASYNC);
+
+        MinecraftServer.getSchedulerManager().scheduleTask(this::killEntities,
+                TaskSchedule.immediate(),
+                TaskSchedule.tick(5),
+                ExecutionType.SYNC);
 
 //        MinecraftServer.getSchedulerManager().scheduleTask(() -> {
 //            for(var fallingBlock : this.risingBlocks) {
@@ -104,5 +112,48 @@ public class WWGame extends Game {
                 }
             }, TaskSchedule.tick(5), TaskSchedule.stop(), ExecutionType.ASYNC);
         });
+    }
+
+    public void killEntities() {
+        killPlayers();
+        killItems();
+    }
+
+    public void killPlayers() {
+        for(GamePlayer player : this.players) {
+            if(player.isAlive() && isOnFloor(player.getPosition())) {
+                player.kill();
+            }
+        }
+    }
+
+    public void killItems() {
+        for(Entity entity : this.mainInstance.getEntities()) {
+            if(!(entity instanceof ItemEntity)) { continue; }
+            if(!entity.isRemoved() && isOnFloor(entity.getPosition())) {
+                entity.remove();
+            }
+        }
+    }
+
+    public boolean isOnFloor(Pos pos) {
+        var map = this.mainInstance.getMap();
+
+        var maxPos = map.getMaxPos();
+
+        var x = (this.floorLevel * blocksPerLevel) % maxPos.blockX();
+        var y = (this.floorLevel * blocksPerLevel) / maxPos.blockX();
+
+        if(pos.x() > x) { //Lower half
+            if(pos.y() < y + 1) {
+                return true;
+            }
+        } else { //Higher half
+            if(pos.y() < y + 2) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

@@ -3,10 +3,8 @@ package cc.minetale.woolwars;
 import cc.minetale.slime.loot.Loot;
 import cc.minetale.slime.loot.LootPool;
 import cc.minetale.slime.loot.context.ContextType;
-import cc.minetale.slime.loot.entry.ItemEntry;
 import cc.minetale.slime.loot.entry.LootEntry;
 import cc.minetale.slime.loot.function.LootFunction;
-import cc.minetale.slime.loot.predicate.LootPredicate;
 import cc.minetale.slime.loot.util.NumberProvider;
 import net.minestom.server.item.Material;
 

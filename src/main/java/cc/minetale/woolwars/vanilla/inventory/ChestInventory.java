@@ -2,7 +2,6 @@ package cc.minetale.woolwars.vanilla.inventory;
 
 import cc.minetale.woolwars.vanilla.VanillaUtils;
 import cc.minetale.woolwars.vanilla.blocks.ChestBlockHandler;
-import cc.minetale.woolwars.vanilla.blocks.ContainerHandler;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Player;
@@ -19,8 +18,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-
-import static cc.minetale.woolwars.vanilla.blocks.ChestBlockHandler.TAG_ITEMS;
 
 public class ChestInventory extends Inventory {
     protected final Instance instance;

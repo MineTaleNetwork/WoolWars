@@ -3,12 +3,10 @@ package cc.minetale.woolwars.vanilla.blocks;
 import cc.minetale.woolwars.vanilla.VanillaUtils;
 import cc.minetale.woolwars.vanilla.inventory.ChestInventory;
 import net.minestom.server.coordinate.Point;
-import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
-import net.minestom.server.item.ItemStack;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.utils.Direction;
 import org.jetbrains.annotations.NotNull;
@@ -18,7 +16,6 @@ import org.jglrxavpok.hephaistos.nbt.NBTList;
 import org.jglrxavpok.hephaistos.nbt.NBTType;
 
 import java.util.List;
-import java.util.function.Function;
 
 public class ChestBlockHandler extends ContainerHandler {
 

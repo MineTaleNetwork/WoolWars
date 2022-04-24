@@ -1,29 +1,19 @@
 package cc.minetale.woolwars.utils;
 
-import cc.minetale.commonlib.util.CollectionsUtil;
 import cc.minetale.slime.game.GameInstance;
-import cc.minetale.slime.loot.Loot;
-import cc.minetale.slime.loot.LootRegistry;
-import cc.minetale.slime.loot.LootTable;
-import cc.minetale.slime.loot.TableType;
-import cc.minetale.slime.loot.context.LootContext;
 import cc.minetale.slime.map.AbstractMap;
 import cc.minetale.woolwars.ChestLoot;
-import cc.minetale.woolwars.vanilla.blocks.ChestBlockHandler;
 import cc.minetale.woolwars.vanilla.blocks.LootChestBlockHandler;
 import lombok.experimental.UtilityClass;
 import net.minestom.server.coordinate.Vec;
-import net.minestom.server.instance.Instance;
+import net.minestom.server.instance.Chunk;
+import net.minestom.server.instance.batch.AbsoluteBlockBatch;
 import net.minestom.server.instance.block.Block;
-import net.minestom.server.inventory.InventoryType;
-import net.minestom.server.item.ItemStack;
-import net.minestom.server.utils.NamespaceID;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.CompletableFuture;
 
 @UtilityClass
 public final class MapUtil {
@@ -32,19 +22,29 @@ public final class MapUtil {
 
     public static void generateChests(GameInstance instance, float chance) {
         AbstractMap map = instance.getMap();
+        AbsoluteBlockBatch batch = new AbsoluteBlockBatch();
         Vec minPos = map.getMinPos().add(0.0, 1.0, 0.0);
         Vec maxPos = map.getMaxPos().sub(1.0, 1.0, 1.0);
+        List<CompletableFuture<Chunk>> chunkFutures = new ArrayList<>();
         for(int x = minPos.blockX(); x < maxPos.blockX(); x++) {
-            for (int y = minPos.blockY(); y < maxPos.blockY(); y++) {
-                for (int z = minPos.blockZ(); z < maxPos.blockZ(); z++) {
+            for (int z = minPos.blockZ(); z < maxPos.blockZ(); z++) {
+                for (int y = minPos.blockY(); y < maxPos.blockY(); y++) {
                     if (!(random.nextFloat() <= chance)) continue;
                     String facing = facings.get(random.nextInt(facings.size()));
 
                     Block block = LootChestBlockHandler.applyFor(Block.CHEST.withProperty("facing", facing), ChestLoot.loot);
 
-                    instance.setBlock(x, y, z, block);
+                    batch.setBlock(x, y, z, block);
+                }
+
+                if(!instance.isChunkLoaded(x, z)) {
+                    chunkFutures.add(instance.loadChunk(x, z));
                 }
             }
         }
+
+        CompletableFuture.allOf(chunkFutures.toArray(new CompletableFuture[0])).thenRun(() -> {
+            batch.apply(instance, null);
+        });
     }
 }

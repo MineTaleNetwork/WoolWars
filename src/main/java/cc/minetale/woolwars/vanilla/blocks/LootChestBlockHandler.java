@@ -7,25 +7,18 @@ import lombok.Getter;
 import lombok.Setter;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
-import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
-import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.inventory.InventoryType;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.utils.NamespaceID;
-import org.apache.commons.lang3.mutable.Mutable;
-import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBT;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
-import org.jglrxavpok.hephaistos.nbt.NBTList;
 import org.jglrxavpok.hephaistos.nbt.NBTType;
-import org.jglrxavpok.hephaistos.nbt.mutable.MutableNBTCompound;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Getter @Setter
